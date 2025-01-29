@@ -17,7 +17,7 @@ public class AccountRestController {
         this.accountRepository = bankAccountRepository;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public List<BankAccount> accountList() {
         return accountRepository.findAll();
     }

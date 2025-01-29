@@ -1,9 +1,46 @@
 version: "3.8"
 services:
+  eureka-server:
+    build:
+      context: ./eureka-server
+    container_name: "eureka-server"
+    environment:
+      - SERVER_PORT=8761
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  gateway-service:
+    build:
+      context: ./gateway-service
+    container_name: "gateway-service"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_ENABLED=false
+    ports:
+      - "8888:8888"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
   customer-service:
     build:
       context: ./customer-service
     container_name: "customer-service"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
     environment:
       - SERVER_PORT=9091
     ports:
