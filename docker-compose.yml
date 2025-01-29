@@ -1,9 +1,9 @@
 version: "3.8"
 services:
-  eureka-server:
+  discovery-service:
     build:
-      context: ./eureka-server
-    container_name: "eureka-server"
+      context: ./discovery-service
+    container_name: "discovery-service"
     environment:
       - SERVER_PORT=8761
     ports:
@@ -20,11 +20,11 @@ services:
       context: ./gateway-service
     container_name: "gateway-service"
     depends_on:
-      eureka-server:
+      discovery-service:
         condition: service_healthy
     environment:
-      - SERVER_PORT=8080
-      - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_ENABLED=false
+      - SERVER_PORT=8888
+      - EUREKA_SERVER_URL=http://discovery-service:8761/eureka/
     ports:
       - "8888:8888"
     healthcheck:
@@ -39,10 +39,11 @@ services:
       context: ./customer-service
     container_name: "customer-service"
     depends_on:
-      eureka-server:
+      discovery-service:
         condition: service_healthy
     environment:
       - SERVER_PORT=9091
+      - EUREKA_SERVER_URL=http://discovery-service:8761/eureka/
     ports:
       - "9091:9091"
     healthcheck:
@@ -61,5 +62,6 @@ services:
         condition: service_healthy
     environment:
       - SERVER_PORT=9092
+      - EUREKA_SERVER_URL=http://discovery-service:8761/eureka/
     ports:
       - "9092:9092"

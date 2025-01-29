@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y curl \
 WORKDIR /app
 
 # Step 8: Copy the JAR file from the build image to the runtime image
-COPY --from=build /app/target/*.jar /app/customer-service.jar
+COPY --from=build /app/target/*.jar /app/discovery-service.jar
 
 # Step 9: Expose port 8081 for the application
 EXPOSE 8761
