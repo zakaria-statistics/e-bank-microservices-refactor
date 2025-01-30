@@ -1,5 +1,6 @@
 version: "3.8"
 services:
+  # Eureka Discovery Service
   discovery-service:
     build:
       context: ./discovery-service
@@ -14,7 +15,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+    networks:
+      - app-network
 
+  # API Gateway Service
   gateway-service:
     build:
       context: ./gateway-service
@@ -33,7 +37,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+    networks:
+      - app-network
 
+  # Customer Service
   customer-service:
     build:
       context: ./customer-service
@@ -52,7 +59,10 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+    networks:
+      - app-network
 
+  # Account Service
   account-service:
     build:
       context: ./account-service
@@ -65,7 +75,10 @@ services:
       - EUREKA_SERVER_URL=http://discovery-service:8761/eureka/
     ports:
       - "9092:9092"
+    networks:
+      - app-network
 
+  # Angular Frontend
   angular-client:
     build:
       context: ./angular-client
@@ -74,4 +87,10 @@ services:
       discovery-service:
         condition: service_healthy
     ports:
-      - "4200:80" # Map host port 4200 to container's default nginx port 80
+      - "4200:80" # Map host port 4200 to container's nginx (Angular app)
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
