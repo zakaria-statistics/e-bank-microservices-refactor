@@ -1,19 +1,21 @@
-<div>
-  <h2>Customers</h2>
-
-  <!-- Display All Customers -->
-  <div *ngIf="customers.length > 0; else noCustomers">
-    <ul>
-      <li *ngFor="let customer of customers">
-        <strong>First name:</strong> {{ customer.firstName }}<br />
-        <strong>Last name:</strong> {{ customer.lastName }}<br />
-        <strong>Email:</strong> {{ customer.email }}
-      </li>
-    </ul>
+<div class="p-3">
+  <div class="card">
+    <div class="card-body">
+      <table *ngIf="customers" class="table">
+        <thead>
+        <tr>
+          <th>ID</th><th>first name</th><th>last name</th><th>email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let c of customers">
+          <td>{{c.id}}</td>
+          <td>{{c.firstName}}</td>
+          <td>{{c.lastName}}</td>
+          <td>{{c.email}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-
-  <!-- No Customers Placeholder -->
-  <ng-template #noCustomers>
-    <p>No customers available.</p>
-  </ng-template>
 </div>

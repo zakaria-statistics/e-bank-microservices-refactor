@@ -1,27 +1,22 @@
-<div>
-  <h2>Acoounts</h2>
-
-
-
-              <!-- Display Accounts -->
-        <div *ngIf="accounts.length > 0; else noAccounts">
-          <h4>Accounts:</h4>
-          <ul>
-            <li *ngFor="let account of accounts">
-              <strong>Type:</strong> {{ account.type }}<br />
-              <strong>Balance:</strong> {{ account.balance }} <br />
-              <strong>Customer name:</strong> {{ account.customer.firstName }}
-            </li>
-          </ul>
-        </div>
-
-        <!-- No Accounts Placeholder -->
-        <ng-template #noAccounts>
-          <p>No accounts available for this customer.</p>
-        </ng-template>
-
-
-
-
-
+<div class="p-3">
+  <div class="card">
+    <div class="card-body">
+      <table *ngIf="accounts" class="table">
+        <thead>
+        <tr>
+          <th>accountId</th><th>balance</th><th>currency</th><th>type</th><th>customer Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let acc of accounts">
+          <td>{{acc.accountId}}</td>
+          <td>{{acc.balance}}</td>
+          <td>{{acc.currency}}</td>
+          <td>{{acc.type}}</td>
+          <td>{{acc.customer.firstName}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

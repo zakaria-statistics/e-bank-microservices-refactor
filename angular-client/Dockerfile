@@ -9,8 +9,12 @@ WORKDIR /usr/local/app
 # Add the source code to app
 COPY ./ /usr/local/app/
 
-# Install all the dependencies
-RUN npm install
+
+# Install dependencies (Bootstrap and Bootstrap Icons included here)
+# If they are already listed in package.json, they'll be picked up during npm install
+RUN npm install bootstrap bootstrap-icons --save && \
+    npm install
+
 
 # Generate the build of the application
 RUN npm run build
