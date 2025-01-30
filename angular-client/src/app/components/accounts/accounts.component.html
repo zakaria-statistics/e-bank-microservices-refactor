@@ -9,7 +9,8 @@
           <ul>
             <li *ngFor="let account of accounts">
               <strong>Type:</strong> {{ account.type }}<br />
-              <strong>Balance:</strong> {{ account.balance }}
+              <strong>Balance:</strong> {{ account.balance }} <br />
+              <strong>Customer name:</strong> {{ account.customer.firstName }}
             </li>
           </ul>
         </div>

@@ -65,3 +65,13 @@ services:
       - EUREKA_SERVER_URL=http://discovery-service:8761/eureka/
     ports:
       - "9092:9092"
+
+  angular-client:
+    build:
+      context: ./angular-client
+    container_name: angular-client
+    depends_on:
+      discovery-service:
+        condition: service_healthy
+    ports:
+      - "4200:80" # Map host port 4200 to container's default nginx port 80

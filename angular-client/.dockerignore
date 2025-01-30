@@ -1,0 +1,44 @@
+# Ignore all node modules (not needed in the Docker image)
+node_modules
+
+# Ignore Angular build output (dist is built inside the container)
+dist
+.angular
+
+# Ignore configuration files for the development environment (not needed for production builds)
+src/environments/environment.ts
+
+# Ignore local environment overrides
+src/environments/environment.local.ts
+src/environments/environment.*.ts
+
+# Ignore temporary files from npm/yarn and Angular
+npm-debug.log
+yarn-debug.log
+.yarn-integrity
+.package-lock.json
+.pnpm-debug.log
+
+# Ignore IDE/editor files
+.idea
+.vscode
+*.suo
+*.ntvs
+*.njsproj
+*.sln
+
+# Ignore OS metadata files
+.DS_Store
+Thumbs.db
+
+# Ignore version control files
+.git
+.gitignore
+
+# Ignore Docker configuration files themselves (to avoid adding them to the image)
+.dockerignore
+Dockerfile
+
+# Temporary files and logs
+*.log
+*.tmp
