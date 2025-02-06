@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    bus:
+      enabled: true  # Enable Spring Cloud Bus
+      amqp:
+        host: localhost  # Address of RabbitMQ (use the IP or DNS in production)
+        port: 5672
+        exchange: configExchange  # Must match the one in Config Server
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "refresh"  # Ensure /actuator/refresh is enabled for the microservices

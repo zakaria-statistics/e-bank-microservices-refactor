@@ -13,18 +13,21 @@ import java.util.Map;
 @RestController
 @RefreshScope
 public class ConfigTestRestController {
-    @Value("${customer.params.dev1}")
-    private String x;
-    @Value("${customer.params.dev2}")
-    private String y;
+//    @Value("${customer.params.dev1}")
+//    private String x;
+//    @Value("${customer.params.dev2}")
+//    private String y;
 
-    @Autowired
-    private final ConfigParams configParams;
-    
-    @GetMapping("/config1")
-    public Map<String, String> params1(){
-        return Map.of("x",x,"y",y);
+    private ConfigParams configParams;
+
+    public ConfigTestRestController(ConfigParams configParams) {
+        this.configParams = configParams;
     }
+
+//    @GetMapping("/config1")
+//    public Map<String, String> params1(){
+//        return Map.of("x",x,"y",y);
+//    }
 
     @GetMapping("/config2")
     public ConfigParams params2(){

@@ -1,15 +1,18 @@
 package net.zakaria.customerservice;
 
+import net.zakaria.customerservice.config.ConfigParams;
 import net.zakaria.customerservice.entities.Customer;
 import net.zakaria.customerservice.repository.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.util.List;
 
 @SpringBootApplication
+@EnableConfigurationProperties(ConfigParams.class)
 public class CustomerServiceApplication {
 
     public static void main(String[] args) {
