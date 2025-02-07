@@ -44,12 +44,6 @@
 <!--            <artifactId>spring-boot-starter-data-rest</artifactId>-->
 <!--        </dependency>-->
 
-<!--        <dependency>-->
-<!--            <groupId>org.postgresql</groupId>-->
-<!--            <artifactId>postgresql</artifactId>-->
-<!--            <version>42.6.0</version> &lt;!&ndash; Use the latest version &ndash;&gt;-->
-<!--        </dependency>-->
-
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
             <groupId>mysql</groupId>
@@ -57,10 +51,7 @@
             <version>8.0.28</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bus-amqp</artifactId> <!-- For RabbitMQ -->
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -82,14 +73,20 @@
             <version>2.7.0</version>
         </dependency>
 
-
-
-
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.28</version>
         </dependency>
+
+
+
+
+<!--        <dependency>-->
+<!--            <groupId>com.h2database</groupId>-->
+<!--            <artifactId>h2</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
