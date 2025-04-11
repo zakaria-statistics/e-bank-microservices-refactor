@@ -18,15 +18,17 @@ pipeline {
                     writeFile file: 'microservices.txt', text: servicePaths.join('\n')
                     microservices = readFile('microservices.txt').split('\n').findAll { it.trim() }
 
-                    microservices.each { servicePath ->
-                        def serviceName = servicePath.tokenize('/').last() // Extract folder name as service name
-                        echo "Building and pushing Docker image for ${serviceName}..."
-                        dir(servicePath) {
-                            sh """
-                                docker build -t ${DOCKER_HUB_USERNAME}/${serviceName}:latest .
-                                echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
-                                docker push ${DOCKER_HUB_USERNAME}/${serviceName}:latest
-                            """
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        microservices.each { servicePath ->
+                            def serviceName = servicePath.tokenize('/').last() // Extract folder name as service name
+                            echo "Building and pushing Docker image for ${serviceName}..."
+                            dir(servicePath) {
+                                sh """
+                                    docker build -t ${DOCKER_USER}/${serviceName}:latest .
+                                    echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+                                    docker push ${DOCKER_USER}/${serviceName}:latest
+                                """
+                            }
                         }
                     }
                 }
@@ -38,7 +40,7 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         def microservices = readFile('microservices.txt').split('\n').findAll { it.trim() }
-                        microservices.each { servicePath ->
+                        microservices.each { servicePath -> 
                             def serviceName = servicePath.tokenize('/').last()
                             echo "Deploying ${serviceName} to Kubernetes..."
                             dir("k8s/${serviceName}") {

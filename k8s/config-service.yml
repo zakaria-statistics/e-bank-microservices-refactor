@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: config-service
+  namespace: cicd
 spec:
   replicas: 1
   selector:
@@ -21,7 +22,7 @@ spec:
             - name: SERVER_PORT
               value: "9999"
             - name: EUREKA_SERVER_URL
-              value: "http://discovery-service:8761/eureka"
+              value: "http://discovery-service.cicd.svc.cluster.local:8761/eureka"
           livenessProbe:
             httpGet:
               path: /actuator/health
@@ -33,6 +34,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: config-service
+  namespace: cicd
 spec:
   selector:
     app: config-service

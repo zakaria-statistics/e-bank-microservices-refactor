@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: customer-service
+  namespace: cicd
 spec:
   replicas: 1
   selector:
@@ -21,11 +22,11 @@ spec:
             - name: SERVER_PORT
               value: "9091"
             - name: EUREKA_SERVER_URL
-              value: "http://discovery-service:8761/eureka/"
+              value: "http://discovery-service.cicd.svc.cluster.local:8761/eureka/"
             - name: CONFIG_SERVER_URL
-              value: "http://config-service:9999/"
+              value: "http://config-service.cicd.svc.cluster.local:9999/"
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://customer-mysql:3306/customer-db"
+              value: "jdbc:mysql://customer-mysql.cicd.svc.cluster.local:3306/customer-db"
             - name: SPRING_DATASOURCE_USERNAME
               value: "root"
             - name: SPRING_DATASOURCE_PASSWORD
@@ -47,6 +48,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: customer-service
+  namespace: cicd
 spec:
   selector:
     app: customer-service

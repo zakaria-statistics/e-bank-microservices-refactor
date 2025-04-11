@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: customer-mysql
+  namespace: cicd
 spec:
   replicas: 1
   selector:
@@ -27,12 +28,14 @@ spec:
               mountPath: /var/lib/mysql
       volumes:
         - name: mysql-data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: customer-mysql-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: customer-mysql
+  namespace: cicd
 spec:
   selector:
     app: customer-mysql
@@ -46,9 +49,25 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: customer-mysql-pvc
+  namespace: cicd
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: customer-mysql-pv
+  namespace: cicd
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  hostPath:
+    path: /mnt/data/customer-mysql

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: account-postgres
+  namespace: cicd
 spec:
   replicas: 1
   selector:
@@ -27,12 +28,14 @@ spec:
           mountPath: /var/lib/postgres/data
       volumes:
       - name: postgres-data
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: account-postgres-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: account-postgres
+  namespace: cicd
 spec:
   selector:
     app: account-postgres
@@ -41,3 +44,31 @@ spec:
     port: 5432
     targetPort: 5432
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: account-postgres-pvc
+  namespace: cicd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: account-postgres-pv
+  namespace: cicd
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  hostPath:
+    path: /mnt/data/account-postgres
