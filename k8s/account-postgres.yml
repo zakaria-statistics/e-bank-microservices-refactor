@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-postgres
+  template:
+    metadata:
+      labels:
+        app: account-postgres
+    spec:
+      containers:
+      - name: account-postgres
+        image: postgres:13
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          value: "postgrespassword"
+        - name: POSTGRES_DB
+          value: "account-db"
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgres/data
+      volumes:
+      - name: postgres-data
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-postgres
+spec:
+  selector:
+    app: account-postgres
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+  type: ClusterIP

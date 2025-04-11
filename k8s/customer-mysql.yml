@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: customer-mysql
+  template:
+    metadata:
+      labels:
+        app: customer-mysql
+    spec:
+      containers:
+        - name: customer-mysql
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "rootpassword"
+            - name: MYSQL_DATABASE
+              value: "customer-db"
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-mysql
+spec:
+  selector:
+    app: customer-mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: customer-mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
