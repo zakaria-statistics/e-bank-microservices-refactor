@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        /*stage('Build and Push Images') {
+        stage('Build and Push Images') {
             steps {
                 script {
                     // Dynamically find all microservices with Dockerfiles
@@ -22,18 +22,18 @@ pipeline {
                         microservices.each { servicePath ->
                             def serviceName = servicePath.tokenize('/').last() // Extract folder name as service name
                             echo "Building and pushing Docker image for ${serviceName}..."
-                            dir(servicePath) {
+                            /*dir(servicePath) {
                                 sh """
                                     docker build -t ${DOCKER_USER}/${serviceName}:latest .
                                     echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
                                     docker push ${DOCKER_USER}/${serviceName}:latest
                                 """
-                            }
+                            }*/
                         }
                     }
                 }
             }
-        }*/
+        }
 
         stage('Deploy to Kubernetes') {
             steps {
