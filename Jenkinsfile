@@ -38,30 +38,18 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    def microservices = readFile('microservices.txt').split('\n').findAll { it.trim() }
-                    microservices.each { servicePath -> 
-                        def serviceName = servicePath.tokenize('/').last()
-                        echo "Deploying ${serviceName} to Kubernetes..."
-                        dir("k8s/${serviceName}") {
-                            kubernetesDeploy(
-                                configs: '*.yaml', // Adjust if your manifest files have a different extension
-                                kubeconfigId: 'kubeconfig', // Use the credentials ID for your kubeconfig
-                                enableConfigSubstitution: true
-                            )
-                        }
-                    }
-                    /*withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                         def microservices = readFile('microservices.txt').split('\n').findAll { it.trim() }
                         microservices.each { servicePath -> 
                             def serviceName = servicePath.tokenize('/').last()
                             echo "Deploying ${serviceName} to Kubernetes..."
                             dir("k8s/${serviceName}") {
                                 sh """
-                                    kubectl apply -f .
+                                    kubectl apply -f . --kubeconfig=$KUBECONFIG
                                 """
                             }
                         }
-                    }*/
+                    }
                 }
             }
         }
