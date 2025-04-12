@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('Build and Push Images') {
+        /*stage('Build and Push Images') {
             steps {
                 script {
                     // Dynamically find all microservices with Dockerfiles
@@ -33,7 +33,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Deploy to Kubernetes') {
             steps {
