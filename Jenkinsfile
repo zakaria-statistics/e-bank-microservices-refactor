@@ -36,12 +36,18 @@ pipeline {
                         microservices.each { servicePath ->
                             def serviceName = servicePath.tokenize('/').last() // Extract folder name as service name
                             echo "Building and pushing Docker image for ${serviceName}..."
-                              dir(servicePath) {
-                                sh """
-                                    docker build -t ${DOCKER_USER}/${serviceName}:latest .
-                                    echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-                                    docker push ${DOCKER_USER}/${serviceName}:latest
-                                """
+                            dir(servicePath) {
+                                echo "Checking current directory: ${pwd()}"
+                                if (fileExists('Dockerfile')) {
+                                    echo "Dockerfile found in ${servicePath}"
+                                    sh """
+                                        docker build -t ${DOCKER_USER}/${serviceName}:latest .
+                                        echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
+                                        docker push ${DOCKER_USER}/${serviceName}:latest
+                                    """
+                                } else {
+                                    error "Dockerfile not found in ${servicePath}. Skipping build for ${serviceName}."
+                                }
                             }
                         }
                     }
