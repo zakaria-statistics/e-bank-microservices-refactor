@@ -20,6 +20,9 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'master', url: 'https://github.com/zakaria-statistics/e-bank-microservices-refactor.git'
+                echo "Listing contents of the workspace after checkout..."
+                sh "ls -la"
+                sh "ls -la . || echo '. directory not found'"
             }
         }
         stage('Build and Push Images') {
@@ -28,7 +31,16 @@ pipeline {
                     // Dynamically find all microservices with Dockerfiles
                     def microservices = []
                     def serviceNames = ['account-service', 'angular-client', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
-                    def servicePaths = serviceNames.collect { "microservices/${it}" }
+                    def servicePaths = serviceNames.collect { serviceName ->
+                        def path = serviceName // Adjusted to match the folder structure
+                        if (fileExists(path)) {
+                            return path
+                        } else {
+                            echo "Directory ${path} does not exist. Skipping."
+                            return null
+                        }
+                    }.findAll { it != null }
+                    echo "Resolved servicePaths: ${servicePaths}"
                     writeFile file: 'microservices.txt', text: servicePaths.join('\n')
                     microservices = readFile('microservices.txt').split('\n').findAll { it.trim() }
 
