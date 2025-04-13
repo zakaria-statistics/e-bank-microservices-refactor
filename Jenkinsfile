@@ -23,11 +23,16 @@ pipeline {
                 deleteDir()
             }
         }
-        stage('Checkout Code') {
+        stages {
+        stage('Manual Clone') {
             steps {
-                git branch: 'master', url: 'https://github.com/zakaria-statistics/e-bank-microservices-refactor.git'
+                sh '''
+                    rm -rf * .git || true
+                    git clone https://github.com/zakaria-statistics/e-bank-microservices-refactor.git .
+                '''
             }
         }
+    }
         stage('Build and Push Images') {
             steps {
                 script {
