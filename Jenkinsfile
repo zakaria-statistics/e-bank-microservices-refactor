@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Checkout Code') {
             steps {
-                git branch: 'master', url: ' https://github.com/zakaria-statistics/e-bank-microservices-refactor.git'
+                git branch: 'master', url: 'https://github.com/zakaria-statistics/e-bank-microservices-refactor.git'
             }
         }
         stage('Build and Push Images') {
