@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: account-service
-          image: zacklordbing1909/account-service:latest
+          image: docker.io/zacklordbing1909/account-service:latest
           ports:
             - containerPort: 9092
           env:

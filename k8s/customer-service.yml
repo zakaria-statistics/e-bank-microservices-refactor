@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: customer-service
-          image: zacklordbing1909/customer-service:latest
+          image: docker.io/zacklordbing1909/customer-service:latest
           ports:
             - containerPort: 9091
           env:

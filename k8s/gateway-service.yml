@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: gateway-service
-          image: zacklordbing1909/gateway-service:latest
+          image: docker.io/zacklordbing1909/gateway-service:latest
           ports:
             - containerPort: 8888
           env:

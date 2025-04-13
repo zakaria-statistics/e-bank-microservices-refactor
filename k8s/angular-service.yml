@@ -15,8 +15,8 @@ spec:
         app: angular-client
     spec:
       containers:
-      - name: angular-client
-        image: zacklordbing1909/angular-client:latest
+      - name: angular-service
+        image: docker.io/zacklordbing1909/angular-client:latest
         ports:
         - containerPort: 80
 ---
