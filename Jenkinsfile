@@ -56,7 +56,7 @@ pipeline {
                         def serviceNames = ['account-service', 'angular-client', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
                         serviceNames.each { serviceName ->
                             echo "Deploying ${serviceName} to Kubernetes..."
-                            sh 'kubectl apply -f k8s/' + serviceName + '.yaml --kubeconfig=' + KUBECONFIG
+                            sh 'kubectl apply -f k8s/' + serviceName + '.yml --kubeconfig=' + KUBECONFIG
                         }
                     }
                 }
