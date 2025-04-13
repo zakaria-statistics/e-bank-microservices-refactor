@@ -53,13 +53,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        def microservices = readFile('microservices.txt').split('\n').findAll { it.trim() }
-                        microservices.each { servicePath -> 
-                            def serviceName = servicePath.tokenize('/').last()
+                        def serviceNames = ['account-service', 'angular-client', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
+                        serviceNames.each { serviceName ->
                             echo "Deploying ${serviceName} to Kubernetes..."
-                            dir("k8s/${serviceName}") {
-                                sh 'kubectl apply -f . --kubeconfig=' + KUBECONFIG
-                            }
+                            sh 'kubectl apply -f k8s/' + serviceName + '.yaml --kubeconfig=' + KUBECONFIG
                         }
                     }
                 }
