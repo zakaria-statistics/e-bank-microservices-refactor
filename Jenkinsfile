@@ -38,6 +38,7 @@ pipeline {
                             echo "Building and pushing Docker image for ${serviceName}..."
                             dir(servicePath) {
                                 echo "Checking current directory: ${pwd()}"
+                                sh "ls -la" // List files in the current directory for debugging
                                 if (fileExists('Dockerfile')) {
                                     echo "Dockerfile found in ${servicePath}"
                                     sh """
