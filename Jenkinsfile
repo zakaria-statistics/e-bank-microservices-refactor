@@ -12,23 +12,14 @@ pipeline {
     }
 
     stages {
-        /*stage('Clean Workspace') {
+        stage('Clean Workspace') {
             steps {
                 cleanWs()
             }
-        }*/
-        stage('Wipe Workspace') {
-            steps {
-                // plugin must be installed
-                deleteDir()
-            }
         }
-        stage('Manual Checkout') {
+        stage('Checkout Code') {
             steps {
-                sh '''
-                rm -rf * .git || true
-                git clone https://github.com/zakaria-statistics/e-bank-microservices-refactor.git .
-                '''
+                git branch: 'master', url: 'https://github.com/zakaria-statistics/e-bank-microservices-refactor.git'
             }
         }
         stage('Build and Push Images') {
@@ -45,7 +36,7 @@ pipeline {
                         microservices.each { servicePath ->
                             def serviceName = servicePath.tokenize('/').last() // Extract folder name as service name
                             echo "Building and pushing Docker image for ${serviceName}..."
-                            /*dir(servicePath) {
+/*                            /*dir(servicePath) {
                                 sh """
                                     docker build -t ${DOCKER_USER}/${serviceName}:latest .
                                     echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
@@ -67,9 +58,7 @@ pipeline {
                             def serviceName = servicePath.tokenize('/').last()
                             echo "Deploying ${serviceName} to Kubernetes..."
                             dir("k8s/${serviceName}") {
-                                sh """
-                                    kubectl apply -f . --kubeconfig=$KUBECONFIG
-                                """
+                                sh 'kubectl apply -f . --kubeconfig=' + KUBECONFIG
                             }
                         }
                     }
