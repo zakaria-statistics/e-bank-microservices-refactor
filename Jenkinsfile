@@ -23,16 +23,14 @@ pipeline {
                 deleteDir()
             }
         }
-        stages {
-        stage('Manual Clone') {
+        stage('Manual Checkout') {
             steps {
                 sh '''
-                    rm -rf * .git || true
-                    git clone https://github.com/zakaria-statistics/e-bank-microservices-refactor.git .
+                rm -rf * .git || true
+                git clone https://github.com/zakaria-statistics/e-bank-microservices-refactor.git .
                 '''
             }
         }
-    }
         stage('Build and Push Images') {
             steps {
                 script {
