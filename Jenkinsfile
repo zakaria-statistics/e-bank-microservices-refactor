@@ -36,13 +36,13 @@ pipeline {
                         microservices.each { servicePath ->
                             def serviceName = servicePath.tokenize('/').last() // Extract folder name as service name
                             echo "Building and pushing Docker image for ${serviceName}..."
-                            dir(servicePath) {
+/*                            /*dir(servicePath) {
                                 sh """
                                     docker build -t ${DOCKER_USER}/${serviceName}:latest .
                                     echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
                                     docker push ${DOCKER_USER}/${serviceName}:latest
                                 """
-                            }
+                            }*/
                         }
                     }
                 }
@@ -56,7 +56,10 @@ pipeline {
                         def serviceNames = ['account-service', 'angular-service', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
                         serviceNames.each { serviceName ->
                             echo "Deploying ${serviceName} to Kubernetes..."
-                            sh 'kubectl apply -f k8s/' + serviceName + '.yml --kubeconfig=' + KUBECONFIG
+                            sh """
+                                sed -i 's|image: ${serviceName}:latest|image: docker.io/${DOCKER_HUB_USERNAME}/${serviceName}:latest|' k8s/${serviceName}.yml
+                                kubectl apply -f k8s/${serviceName}.yml --kubeconfig=${KUBECONFIG}
+                            """
                         }
                     }
                 }
