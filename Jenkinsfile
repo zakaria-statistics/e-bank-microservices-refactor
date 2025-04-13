@@ -36,6 +36,8 @@ pipeline {
                         microservices.each { servicePath ->
                             def serviceName = servicePath.tokenize('/').last() // Extract folder name as service name
                             echo "Building and pushing Docker image for ${serviceName}..."
+                            echo "Resolved servicePath: ${servicePath}"
+                            sh "ls -la ${servicePath}" // List files in the resolved servicePath for debugging
                             dir(servicePath) {
                                 echo "Checking current directory: ${pwd()}"
                                 sh "ls -la" // List files in the current directory for debugging
