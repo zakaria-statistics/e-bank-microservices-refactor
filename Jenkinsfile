@@ -17,6 +17,12 @@ pipeline {
                 cleanWs()
             }
         }*/
+        stage('Wipe Workspace') {
+            steps {
+                // plugin must be installed
+                deleteDir()
+            }
+        }
         stage('Checkout Code') {
             steps {
                 git branch: 'master', url: 'https://github.com/zakaria-statistics/e-bank-microservices-refactor.git'
