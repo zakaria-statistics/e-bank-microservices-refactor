@@ -9,6 +9,7 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub') // Replace with your Jenkins credentials ID
         DOCKER_HUB_USERNAME = 'zacklordbing1909' // Replace with your Docker Hub username
         KUBECONFIG_CREDENTIALS = credentials('kubeconfig') // Replace with your Kubernetes credentials ID
+        DOCKER_HOST = "tcp://docker-daemon.cicd.svc.cluster.local:2375"
     }
 
     stages {
