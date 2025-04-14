@@ -19,12 +19,17 @@ pipeline {
         }*/
         stage('Checkout Code') {
             steps {
-                git branch: 'master', url: 'https://github.com/zakaria-statistics/e-bank-microservices-refactor.git'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: 'master']],
+                    userRemoteConfigs: [[url: 'https://github.com/zakaria-statistics/e-bank-microservices-refactor.git']]
+                ])
                 echo "Listing contents of the workspace after checkout..."
                 sh "ls -la"
                 sh "ls -la . || echo '. directory not found'"
             }
         }
+
         stage('Build and Push Images') {
             steps {
                 script {
