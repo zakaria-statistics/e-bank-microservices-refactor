@@ -12,11 +12,11 @@ pipeline {
     }
 
     stages {
-        stage('Clean Workspace') {
+        /*stage('Clean Workspace') {
             steps {
                 cleanWs()
             }
-        }
+        }*/
         stage('Checkout Code') {
             steps {
                 git branch: 'master', url: "https://github.com/zakaria-statistics/e-bank-microservices-refactor.git"
