@@ -31,7 +31,7 @@ pipeline {
                 script {
                     // Dynamically find all microservices with Dockerfiles
                     def microservices = []
-                    def serviceNames = [/*'account-postgres', 'account-postgres', 'angular-client', 'config-service', 'customer-mysql', 'customer-service', 'discovery-service',*/ 'gateway-service']
+                    def serviceNames = ['account-postgres', 'account-postgres', 'angular-client', 'config-service', 'customer-mysql', 'customer-service', 'discovery-service', 'gateway-service']
                     def servicePaths = serviceNames.collect { serviceName ->
                         def path = serviceName // Adjusted to match the folder structure
                         if (fileExists(path)) {
@@ -75,7 +75,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        def serviceNames = [/*'account-service', 'angular-service', 'config-service', 'customer-service', 'discovery-service',*/ 'gateway-service']
+                        def serviceNames = ['account-service', 'angular-service', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
                         serviceNames.each { serviceName ->
                             echo "Deploying ${serviceName} to Kubernetes..."
                             sh 'kubectl apply -f k8s/' + serviceName + '.yml --kubeconfig=' + KUBECONFIG
