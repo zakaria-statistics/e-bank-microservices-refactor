@@ -30,7 +30,7 @@ pipeline {
                 script {
                     // Dynamically find all microservices with Dockerfiles
                     def microservices = []
-                    def serviceNames = ['account-postgres', 'account-postgres', 'angular-client', 'config-service', 'customer-mysql', 'customer-service', 'discovery-service', 'gateway-service']
+                    def serviceNames = [/*'account-postgres', 'account-postgres', 'angular-client', 'config-service', 'customer-mysql', 'customer-service', 'discovery-service',*/ 'gateway-service']
                     def servicePaths = serviceNames.collect { serviceName ->
                         def path = serviceName // Adjusted to match the folder structure
                         if (fileExists(path)) {
@@ -70,7 +70,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        /*stage('Deploy to Kubernetes') {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
@@ -82,6 +82,6 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     }
 }
