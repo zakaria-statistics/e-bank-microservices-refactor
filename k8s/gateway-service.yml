@@ -25,6 +25,13 @@ spec:
               value: "http://discovery-service.cicd.svc.cluster.local:8761/eureka/"
             - name: CONFIG_SERVER_URL
               value: "http://config-service.cicd.svc.cluster.local:9999/"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
           livenessProbe:
             httpGet:
               path: /actuator/health

@@ -21,6 +21,13 @@ spec:
           env:
             - name: SERVER_PORT
               value: "8761"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
           livenessProbe:
             httpGet:
               path: /actuator/health
