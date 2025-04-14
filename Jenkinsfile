@@ -1,9 +1,9 @@
 pipeline {
     agent any
 
-    options {
+    /*options {
         skipDefaultCheckout()
-    }
+    }*/
 
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub') // Replace with your Jenkins credentials ID
