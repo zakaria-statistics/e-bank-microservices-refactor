@@ -125,7 +125,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        def serviceNames = ['account-service', 'angular-client', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
+                        def serviceNames = ['account-service', 'angular-service', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
                         serviceNames.each { serviceName ->
                             echo "Deploying ${serviceName} to Kubernetes..."
                             sh "kubectl apply -f k8s/${serviceName}.yml --kubeconfig=${KUBECONFIG}"
