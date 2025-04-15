@@ -1,68 +1,118 @@
 pipeline {
     agent any
 
-    /*options {
-        skipDefaultCheckout()
-    }*/
-
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub') // Replace with your Jenkins credentials ID
         DOCKER_HUB_USERNAME = 'zacklordbing1909' // Replace with your Docker Hub username
         KUBECONFIG_CREDENTIALS = credentials('kubeconfig') // Replace with your Kubernetes credentials ID
-        DOCKER_HOST = "tcp://docker-daemon.cicd.svc.cluster.local:2375"
     }
 
     stages {
-        /*stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
-        }*/
-        /*stage('Checkout Code') {
-            steps {
-                git branch: 'master', url: 'https://github.com/zakaria-statistics/e-bank-microservices-refactor.git'
-                echo "Listing contents of the workspace after checkout..."
-                sh "ls -la"
-                sh "ls -la . || echo '. directory not found'"
-            }
-        }*/
         stage('Build and Push Images') {
-            steps {
-                script {
-                    // Dynamically find all microservices with Dockerfiles
-                    def microservices = []
-                    def serviceNames = ['account-postgres', 'account-postgres', 'angular-client', 'config-service', 'customer-mysql', 'customer-service', 'discovery-service', 'gateway-service']
-                    def servicePaths = serviceNames.collect { serviceName ->
-                        def path = serviceName // Adjusted to match the folder structure
-                        if (fileExists(path)) {
-                            return path
-                        } else {
-                            echo "Directory ${path} does not exist. Skipping."
-                            return null
-                        }
-                    }.findAll { it != null }
-                    echo "Resolved servicePaths: ${servicePaths}"
-                    writeFile file: 'microservices.txt', text: servicePaths.join('\n')
-                    microservices = readFile('microservices.txt').split('\n').findAll { it.trim() }
-
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        microservices.each { servicePath ->
-                            def serviceName = servicePath.tokenize('/').last() // Extract folder name as service name
-                            echo "Building and pushing Docker image for ${serviceName}..."
-                            echo "Resolved servicePath: ${servicePath}"
-                            sh "ls -la ${servicePath}" // List files in the resolved servicePath for debugging
-                            dir(servicePath) {
-                                echo "Checking current directory: ${pwd()}"
-                                sh "ls -la" // List files in the current directory for debugging
+            parallel {
+                stage('Build and Push Gateway Service') {
+                    steps {
+                        dir('gateway-service') {
+                            script {
                                 if (fileExists('Dockerfile')) {
-                                    echo "Dockerfile found in ${servicePath}"
+                                    echo "Building and pushing Gateway Service..."
                                     sh """
-                                        docker build -t ${DOCKER_USER}/${serviceName}:latest .
-                                        echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin
-                                        docker push ${DOCKER_USER}/${serviceName}:latest
+                                        docker build -t ${DOCKER_HUB_USERNAME}/gateway-service:latest .
+                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
+                                        docker push ${DOCKER_HUB_USERNAME}/gateway-service:latest
                                     """
                                 } else {
-                                    error "Dockerfile not found in ${servicePath}. Skipping build for ${serviceName}."
+                                    error "Dockerfile not found in gateway-service. Skipping build."
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('Build and Push Account Service') {
+                    steps {
+                        dir('account-service') {
+                            script {
+                                if (fileExists('Dockerfile')) {
+                                    echo "Building and pushing Account Service..."
+                                    sh """
+                                        docker build -t ${DOCKER_HUB_USERNAME}/account-service:latest .
+                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
+                                        docker push ${DOCKER_HUB_USERNAME}/account-service:latest
+                                    """
+                                } else {
+                                    error "Dockerfile not found in account-service. Skipping build."
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('Build and Push Customer Service') {
+                    steps {
+                        dir('customer-service') {
+                            script {
+                                if (fileExists('Dockerfile')) {
+                                    echo "Building and pushing Customer Service..."
+                                    sh """
+                                        docker build -t ${DOCKER_HUB_USERNAME}/customer-service:latest .
+                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
+                                        docker push ${DOCKER_HUB_USERNAME}/customer-service:latest
+                                    """
+                                } else {
+                                    error "Dockerfile not found in customer-service. Skipping build."
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('Build and Push Config Service') {
+                    steps {
+                        dir('config-service') {
+                            script {
+                                if (fileExists('Dockerfile')) {
+                                    echo "Building and pushing Config Service..."
+                                    sh """
+                                        docker build -t ${DOCKER_HUB_USERNAME}/config-service:latest .
+                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
+                                        docker push ${DOCKER_HUB_USERNAME}/config-service:latest
+                                    """
+                                } else {
+                                    error "Dockerfile not found in config-service. Skipping build."
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('Build and Push Discovery Service') {
+                    steps {
+                        dir('discovery-service') {
+                            script {
+                                if (fileExists('Dockerfile')) {
+                                    echo "Building and pushing Discovery Service..."
+                                    sh """
+                                        docker build -t ${DOCKER_HUB_USERNAME}/discovery-service:latest .
+                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
+                                        docker push ${DOCKER_HUB_USERNAME}/discovery-service:latest
+                                    """
+                                } else {
+                                    error "Dockerfile not found in discovery-service. Skipping build."
+                                }
+                            }
+                        }
+                    }
+                }
+                stage('Build and Push Angular Client') {
+                    steps {
+                        dir('angular-client') {
+                            script {
+                                if (fileExists('Dockerfile')) {
+                                    echo "Building and pushing Angular Client..."
+                                    sh """
+                                        docker build -t ${DOCKER_HUB_USERNAME}/angular-client:latest .
+                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
+                                        docker push ${DOCKER_HUB_USERNAME}/angular-client:latest
+                                    """
+                                } else {
+                                    error "Dockerfile not found in angular-client. Skipping build."
                                 }
                             }
                         }
@@ -75,10 +125,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        def serviceNames = ['account-service', 'angular-service', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
+                        def serviceNames = ['account-service', 'angular-client', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
                         serviceNames.each { serviceName ->
                             echo "Deploying ${serviceName} to Kubernetes..."
-                            sh 'kubectl apply -f k8s/' + serviceName + '.yml --kubeconfig=' + KUBECONFIG
+                            sh "kubectl apply -f k8s/${serviceName}.yml --kubeconfig=${KUBECONFIG}"
                         }
                     }
                 }
