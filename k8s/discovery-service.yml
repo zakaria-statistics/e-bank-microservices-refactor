@@ -38,12 +38,14 @@ spec:
             periodSeconds: 15
             timeoutSeconds: 5
             failureThreshold: 3
-          #     livenessProbe:
-          #            httpGet:
-          #              path: /actuator/health
-          #              port: 8761
-          #            initialDelaySeconds: 60
-          #            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8761
+            initialDelaySeconds: 180  # Much longer than readiness probe
+            periodSeconds: 30         # Less frequent checks
+            timeoutSeconds: 10
+            failureThreshold: 5       # More failures allowed before restart
 ---
 apiVersion: v1
 kind: Service
