@@ -14,6 +14,10 @@ spec:
       labels:
         app: angular-client
     spec:
+      initContainers:
+        - name: wait-for-gateway-service
+          image: busybox
+          command: ['sh', '-c', 'until nc -z gateway-service.cicd.svc.cluster.local 8888; do echo waiting for gateway-service; sleep 5; done;']
       containers:
       - name: angular-service
         image: docker.io/zacklordbing1909/angular-client:latest

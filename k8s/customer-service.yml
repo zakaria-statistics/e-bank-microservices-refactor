@@ -13,6 +13,13 @@ spec:
       labels:
         app: customer-service
     spec:
+      initContainers:
+        - name: wait-for-config-service
+          image: busybox
+          command: ['sh', '-c', 'until nc -z config-service.cicd.svc.cluster.local 9999; do echo waiting for config-service; sleep 5; done;']
+        - name: wait-for-customer-mysql
+          image: busybox
+          command: ['sh', '-c', 'until nc -z customer-mysql.cicd.svc.cluster.local 3306; do echo waiting for customer-mysql; sleep 5; done;']
       containers:
         - name: customer-service
           image: docker.io/zacklordbing1909/customer-service:latest

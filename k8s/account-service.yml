@@ -13,6 +13,13 @@ spec:
       labels:
         app: account-service
     spec:
+      initContainers:
+        - name: wait-for-customer-service
+          image: busybox
+          command: ['sh', '-c', 'until nc -z customer-service.cicd.svc.cluster.local 9091; do echo waiting for customer-service; sleep 5; done;']
+        - name: wait-for-account-postgres
+          image: busybox
+          command: ['sh', '-c', 'until nc -z account-postgres.cicd.svc.cluster.local 5432; do echo waiting for account-postgres; sleep 5; done;']
       containers:
         - name: account-service
           image: docker.io/zacklordbing1909/account-service:latest

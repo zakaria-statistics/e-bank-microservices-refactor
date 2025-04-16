@@ -13,6 +13,10 @@ spec:
       labels:
         app: config-service
     spec:
+      initContainers:
+        - name: wait-for-discovery-service
+          image: busybox
+          command: ['sh', '-c', 'until nc -z discovery-service.cicd.svc.cluster.local 8761; do echo waiting for discovery-service; sleep 5; done;']
       containers:
         - name: config-service
           image: docker.io/zacklordbing1909/config-service:latest

@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('Build and Push Images') {
+        /*stage('Build and Push Images') {
             parallel {
                 stage('Build and Push Gateway Service') {
                     steps {
@@ -119,13 +119,13 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Deploy to Kubernetes') {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        def serviceNames = ['account-postgres', 'customer-mysql', 'account-service', 'angular-service', 'config-service', 'customer-service', 'discovery-service', 'gateway-service']
+                        def serviceNames = [/*'account-postgres', 'customer-mysql',*/ 'discovery-service'/*, 'config-service', 'customer-service', 'account-service', 'gateway-service', 'angular-service'*/]
                         serviceNames.each { serviceName ->
                             echo "Deploying ${serviceName} to Kubernetes..."
                             sh "kubectl apply -f k8s/${serviceName}.yml --kubeconfig=${KUBECONFIG}"
