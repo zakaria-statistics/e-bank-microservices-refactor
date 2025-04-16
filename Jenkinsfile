@@ -8,9 +8,9 @@ pipeline {
     }
 
     stages {
-        /*stage('Build and Push Images') {
+        stage('Build and Push Images') {
             parallel {
-                stage('Build and Push Gateway Service') {
+                /*stage('Build and Push Gateway Service') {
                     steps {
                         dir('gateway-service') {
                             script {
@@ -27,8 +27,8 @@ pipeline {
                             }
                         }
                     }
-                }
-                stage('Build and Push Account Service') {
+                }*/
+                /*stage('Build and Push Account Service') {
                     steps {
                         dir('account-service') {
                             script {
@@ -45,8 +45,8 @@ pipeline {
                             }
                         }
                     }
-                }
-                stage('Build and Push Customer Service') {
+                }*/
+                /*stage('Build and Push Customer Service') {
                     steps {
                         dir('customer-service') {
                             script {
@@ -63,8 +63,8 @@ pipeline {
                             }
                         }
                     }
-                }
-                stage('Build and Push Config Service') {
+                }*/
+                /*stage('Build and Push Config Service') {
                     steps {
                         dir('config-service') {
                             script {
@@ -81,7 +81,7 @@ pipeline {
                             }
                         }
                     }
-                }
+                }*/
                 stage('Build and Push Discovery Service') {
                     steps {
                         dir('discovery-service') {
@@ -100,7 +100,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Build and Push Angular Client') {
+                /*stage('Build and Push Angular Client') {
                     steps {
                         dir('angular-client') {
                             script {
@@ -117,9 +117,9 @@ pipeline {
                             }
                         }
                     }
-                }
+                }*/
             }
-        }*/
+        }
 
         stage('Deploy to Kubernetes') {
             steps {
