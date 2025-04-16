@@ -21,19 +21,21 @@ spec:
           env:
             - name: SERVER_PORT
               value: "8761"
+            - name: JAVA_OPTS
+              value: "-Xmx512m -Xms256m -Dlogging.level.root=INFO"
           resources:
             requests:
-              memory: "128Mi"
+              memory: "512Mi"
               cpu: "250m"
             limits:
-              memory: "256Mi"
+              memory: "768Mi"
               cpu: "500m"
-          livenessProbe:
-            httpGet:
-              path: /actuator/health
-              port: 8761
-            initialDelaySeconds: 60
-            periodSeconds: 10
+          #     livenessProbe:
+          #            httpGet:
+          #              path: /actuator/health
+          #              port: 8761
+          #            initialDelaySeconds: 60
+          #            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
