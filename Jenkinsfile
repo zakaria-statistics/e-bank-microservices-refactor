@@ -82,7 +82,7 @@ pipeline {
                         }
                     }
                 }*/
-                /*stage('Build and Push Discovery Service') {
+                stage('Build and Push Discovery Service') {
                     steps {
                         dir('discovery-service') {
                             script {
@@ -99,7 +99,7 @@ pipeline {
                             }
                         }
                     }
-                }*/
+                }
                 /*stage('Build and Push Angular Client') {
                     steps {
                         dir('angular-client') {
