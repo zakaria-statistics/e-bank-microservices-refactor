@@ -13,6 +13,8 @@ spec:
       labels:
         app: config-service
     spec:
+      imagePullSecrets:
+        - name: regcred
       initContainers:
         - name: wait-for-discovery-service
           image: busybox

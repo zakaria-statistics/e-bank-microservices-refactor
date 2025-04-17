@@ -13,6 +13,8 @@ spec:
       labels:
         app: customer-mysql
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: customer-mysql
           image: mysql:8.0

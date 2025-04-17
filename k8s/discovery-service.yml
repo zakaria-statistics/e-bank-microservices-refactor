@@ -13,6 +13,8 @@ spec:
       labels:
         app: discovery-service
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: discovery-service
           image: docker.io/zacklordbing1909/discovery-service:latest
