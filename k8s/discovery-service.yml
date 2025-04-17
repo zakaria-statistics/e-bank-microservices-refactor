@@ -27,18 +27,18 @@ spec:
               value: "-Xmx768m -Xms512m -Dlogging.level.root=INFO"
           resources:
             requests:
-              memory: "512Mi"
-              cpu: "250m"
-            limits:
               memory: "768Mi"
               cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
           readinessProbe:
             httpGet:
               path: /actuator/health
               port: 8761
             initialDelaySeconds: 900  # Increased from 600 to 900
             periodSeconds: 30
-            timeoutSeconds: 20       # Increased from 10 to 20
+            timeoutSeconds: 30       # Increased from 10 to 20
             failureThreshold: 5
           livenessProbe:
             httpGet:
