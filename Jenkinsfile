@@ -105,7 +105,7 @@ pipeline {
                         dir('discovery-service') {
                             script {
                                 if (fileExists('Dockerfile')) {
-                                    echo "Building and pushing Discovery Service..."
+                                    echo "Building and pushing Discovery Service...."
                                     sh """
                                         docker build -t ${DOCKER_HUB_USERNAME}/discovery-service:latest .
                                         echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
