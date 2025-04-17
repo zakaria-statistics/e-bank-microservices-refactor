@@ -8,9 +8,9 @@ pipeline {
     }
 
     stages {
-        /*stage('Build and Push Images') {
+        stage('Build and Push Images') {
             parallel {
-                stage('Build and Push Gateway Service') {
+                /*stage('Build and Push Gateway Service') {
                     steps {
                         dir('gateway-service') {
                             script {
@@ -82,6 +82,24 @@ pipeline {
                         }
                     }
                 }
+                stage('Build and Push Angular Client') {
+                    steps {
+                        dir('angular-client') {
+                            script {
+                                if (fileExists('Dockerfile')) {
+                                    echo "Building and pushing Angular Client..."
+                                    sh """
+                                        docker build -t ${DOCKER_HUB_USERNAME}/angular-client:latest .
+                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
+                                        docker push ${DOCKER_HUB_USERNAME}/angular-client:latest
+                                    """
+                                } else {
+                                    error "Dockerfile not found in angular-client. Skipping build."
+                                }
+                            }
+                        }
+                    }
+                }*/
                 stage('Build and Push Discovery Service') {
                     steps {
                         dir('discovery-service') {
@@ -100,26 +118,8 @@ pipeline {
                         }
                     }
                 }
-                stage('Build and Push Angular Client') {
-                    steps {
-                        dir('angular-client') {
-                            script {
-                                if (fileExists('Dockerfile')) {
-                                    echo "Building and pushing Angular Client..."
-                                    sh """
-                                        docker build -t ${DOCKER_HUB_USERNAME}/angular-client:latest .
-                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
-                                        docker push ${DOCKER_HUB_USERNAME}/angular-client:latest
-                                    """
-                                } else {
-                                    error "Dockerfile not found in angular-client. Skipping build."
-                                }
-                            }
-                        }
-                    }
-                }
             }
-        }*/
+        }
 
         stage('Deploy to Kubernetes') {
             steps {
