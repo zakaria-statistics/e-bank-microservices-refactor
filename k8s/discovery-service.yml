@@ -24,7 +24,7 @@ spec:
             - name: SERVER_PORT
               value: "8761"
             - name: JAVA_OPTS
-              value: "-Xmx712m -Xms512m -Dlogging.level.root=INFO"
+              value: "-Xmx768m -Xms512m -Dlogging.level.root=INFO"
           resources:
             requests:
               memory: "512Mi"
