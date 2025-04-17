@@ -8,8 +8,8 @@ pipeline {
     }
 
     stages {
-        stage('Build and Push Images') {
-            /*parallel {
+        /*stage('Build and Push Images') {
+            parallel {
                 stage('Build and Push Gateway Service') {
                     steps {
                         dir('gateway-service') {
@@ -118,8 +118,8 @@ pipeline {
                         }
                     }
                 }
-            }*/
-        }
+            }
+        }*/
 
         stage('Deploy to Kubernetes') {
             steps {
