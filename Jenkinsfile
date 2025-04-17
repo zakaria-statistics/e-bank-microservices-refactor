@@ -8,9 +8,9 @@ pipeline {
     }
 
     stages {
-        /*stage('Build and Push Images') {
+        stage('Build and Push Images') {
             parallel {
-                stage('Build and Push Gateway Service') {
+                /*stage('Build and Push Gateway Service') {
                     steps {
                         dir('gateway-service') {
                             script {
@@ -117,9 +117,9 @@ pipeline {
                             }
                         }
                     }
-                }
+                }*/
             }
-        }*/
+        }
 
         stage('Deploy to Kubernetes') {
             steps {
