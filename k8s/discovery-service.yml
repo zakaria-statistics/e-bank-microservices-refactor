@@ -12,6 +12,10 @@ spec:
     metadata:
       labels:
         app: discovery-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8761"
     spec:
       imagePullSecrets:
         - name: regcred
@@ -25,6 +29,10 @@ spec:
               value: "8761"
             - name: JAVA_OPTS
               value: "-Xmx768m -Xms512m -Dlogging.level.root=INFO"
+            - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+              value: "health,info,prometheus"
+            - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
+              value: "true"
           resources:
             requests:
               memory: "768Mi"
@@ -48,6 +56,12 @@ spec:
             periodSeconds: 30         # Less frequent checks
             timeoutSeconds: 20         # Increased from 10 to 20
             failureThreshold: 5       # More failures allowed before restart
+          volumeMounts:
+            - name: logs
+              mountPath: /var/log/discovery-service
+      volumes:
+        - name: logs
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
