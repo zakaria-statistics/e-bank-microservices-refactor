@@ -1,8 +1,11 @@
-# Use Maven image for building the application
-FROM maven:3.9.4-eclipse-temurin-17-alpine AS build
+# Use Eclipse Temurin JDK image for building the application
+FROM eclipse-temurin:17-jdk-alpine AS build
 
 # Set the working directory
 WORKDIR /app
+
+# Install Maven
+RUN apk add --no-cache maven
 
 # Copy POM file first to leverage caching for dependencies
 COPY pom.xml . 
