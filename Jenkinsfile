@@ -64,24 +64,6 @@ pipeline {
                         }
                     }
                 }
-                stage('Build and Push Config Service') {
-                    steps {
-                        dir('config-service') {
-                            script {
-                                if (fileExists('Dockerfile')) {
-                                    echo "Building and pushing Config Service..."
-                                    sh """
-                                        docker build -t ${DOCKER_HUB_USERNAME}/config-service:latest .
-                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
-                                        docker push ${DOCKER_HUB_USERNAME}/config-service:latest
-                                    """
-                                } else {
-                                    error "Dockerfile not found in config-service. Skipping build."
-                                }
-                            }
-                        }
-                    }
-                }
                 stage('Build and Push Angular Client') {
                     steps {
                         dir('angular-client') {
@@ -100,6 +82,24 @@ pipeline {
                         }
                     }
                 }*/
+                stage('Build and Push Config Service') {
+                    steps {
+                        dir('config-service') {
+                            script {
+                                if (fileExists('Dockerfile')) {
+                                    echo "Building and pushing Config Service..."
+                                    sh """
+                                        docker build -t ${DOCKER_HUB_USERNAME}/config-service:latest .
+                                        echo ${DOCKER_HUB_CREDENTIALS_PSW} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
+                                        docker push ${DOCKER_HUB_USERNAME}/config-service:latest
+                                    """
+                                } else {
+                                    error "Dockerfile not found in config-service. Skipping build."
+                                }
+                            }
+                        }
+                    }
+                }
                 stage('Build and Push Discovery Service') {
                     steps {
                         dir('discovery-service') {
@@ -125,7 +125,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        def serviceNames = [/*'account-postgres', 'customer-mysql',*/ 'discovery-service'/*, 'config-service', 'customer-service', 'account-service', 'gateway-service', 'angular-service'*/]
+                        def serviceNames = [/*'account-postgres', 'customer-mysql',*/ 'discovery-service', 'config-service'/*, 'customer-service', 'account-service', 'gateway-service', 'angular-service'*/]
                         serviceNames.each { serviceName ->
                             echo "Deploying ${serviceName} to Kubernetes..."
                             sh "kubectl apply -f k8s/${serviceName}.yml --kubeconfig=${KUBECONFIG}"
